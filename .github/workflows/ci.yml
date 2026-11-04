@@ -1,0 +1,47 @@
+name: CI GHA
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+env:
+  CI_RUNNER: GHA
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+  TURBO_SCM_HEAD: ${{ github.sha }}
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [build, typecheck, lint, test, e2e, validate]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Check Hardware Specs
+        run: |
+          echo "=== CPU CORES ==="
+          nproc
+          echo "=== RAM MEMORY ==="
+          free -h
+      - name: Run task
+        shell: bash
+        run: |
+          if [ "${{ matrix.task }}" = validate ]; then
+            npm run format:check
+            npm exec turbo run validate
+          elif [ "${{ matrix.task }}" = e2e ]; then
+            npm exec turbo run e2e -- --affected --concurrency=1
+          else
+            npm exec turbo run ${{ matrix.task }} -- --affected --concurrency=4
+          fi

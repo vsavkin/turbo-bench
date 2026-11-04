@@ -1,0 +1,18 @@
+{
+  "name": "@org/api",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "^4.21.2",
+    "@org/api-products": "*",
+    "@org/models": "*"
+  },
+  "scripts": {
+    "typecheck": "tsc --build tsconfig.json --emitDeclarationOnly",
+    "build": "node ../../tools/build-api.mjs",
+    "lint": "eslint .",
+    "test": "vitest run --passWithNoTests",
+    "serve": "node dist/main.js",
+    "dev": "node --watch dist/main.js"
+  }
+}

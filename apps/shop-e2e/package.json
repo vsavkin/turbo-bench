@@ -1,0 +1,14 @@
+{
+  "name": "@org/shop-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "@org/shop": "*"
+  },
+  "scripts": {
+    "typecheck": "tsc --build tsconfig.json --emitDeclarationOnly",
+    "lint": "eslint .",
+    "e2e": "playwright test",
+    "e2e-ci": "playwright test"
+  }
+}

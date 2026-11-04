@@ -1,0 +1,277 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "globalEnv": ["CI_RUNNER"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "^production-inputs"],
+      "outputs": ["dist/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!.eslintrc.json",
+        "!eslint.config.*",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}.snap",
+        "!tsconfig.spec.json",
+        "!src/test-setup.{js,ts}",
+        "!test-setup.{js,ts}",
+        "!vitest.config.*",
+        "$TURBO_ROOT$/tsconfig.base.json"
+      ]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck", "^typecheck-inputs"],
+      "outputs": [
+        "dist/**/*.{d.ts,d.cts,d.mts}",
+        "dist/**/*.{d.ts,d.cts,d.mts}.map",
+        "dist/**/*.tsbuildinfo",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}.map",
+        "out-tsc/**/*.tsbuildinfo",
+        "*.tsbuildinfo"
+      ],
+      "inputs": [
+        "package.json",
+        "tsconfig*.json",
+        "src/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}",
+        "vite.config.*",
+        "vitest.config.*",
+        "playwright.config.*",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        {
+          "mode": "dependencyOutputs",
+          "globs": [
+            "dist/**/*.{d.ts,d.cts,d.mts}",
+            "dist/**/*.tsbuildinfo",
+            "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+            "out-tsc/**/*.tsbuildinfo",
+            "*.tsbuildinfo"
+          ],
+          "from": ["^typecheck"]
+        }
+      ]
+    },
+    "lint": {
+      "outputs": [],
+      "dependsOn": ["^dependency-inputs"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.mjs",
+        "$TURBO_ROOT$/tools/eslint-rules/**"
+      ]
+    },
+    "test": {
+      "dependsOn": ["^build", "^production-inputs", "^test-config-inputs"],
+      "outputs": ["test-output/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/test-delay/**",
+        {
+          "mode": "dependencyOutputs",
+          "globs": ["dist/**/*.js"],
+          "from": ["^build"]
+        }
+      ],
+      "env": ["CI", "UNIT_TEST_*"]
+    },
+    "e2e": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"]
+    },
+    "e2e-ci": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "serve": {
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "preview": {
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "serve-static": {
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/api#serve": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/api#dev": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/shop#dev": {
+      "with": ["@org/api#dev"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/shop#serve": {
+      "with": ["@org/api#serve"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/shop#preview": {
+      "dependsOn": ["build"],
+      "with": ["@org/api#serve"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "//#validate": {
+      "cache": false
+    },
+    "production-inputs": {
+      "dependsOn": ["^production-inputs"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!.eslintrc.json",
+        "!eslint.config.*",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}.snap",
+        "!tsconfig.spec.json",
+        "!src/test-setup.{js,ts}",
+        "!test-setup.{js,ts}",
+        "!vitest.config.*"
+      ],
+      "outputs": []
+    },
+    "dependency-inputs": {
+      "dependsOn": ["^dependency-inputs"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
+    "test-config-inputs": {
+      "dependsOn": ["^test-config-inputs"],
+      "inputs": ["tsconfig.spec.json", "tsconfig.storybook.json"],
+      "outputs": []
+    },
+    "@org/api#build": {
+      "dependsOn": ["^build", "^production-inputs"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!.eslintrc.json",
+        "!eslint.config.*",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}.snap",
+        "!tsconfig.spec.json",
+        "!src/test-setup.{js,ts}",
+        "!test-setup.{js,ts}",
+        "!vitest.config.*",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tools/build-api.mjs"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "@org/api-products#typecheck": {
+      "dependsOn": ["build", "^typecheck", "^typecheck-inputs"],
+      "outputs": [
+        "dist/**/*.{d.ts,d.cts,d.mts}",
+        "dist/**/*.{d.ts,d.cts,d.mts}.map",
+        "dist/**/*.tsbuildinfo",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}.map",
+        "out-tsc/**/*.tsbuildinfo",
+        "*.tsbuildinfo"
+      ],
+      "inputs": [
+        "package.json",
+        "tsconfig*.json",
+        "src/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}",
+        "vite.config.*",
+        "vitest.config.*",
+        "playwright.config.*",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        {
+          "mode": "dependencyOutputs",
+          "globs": [
+            "dist/**/*.{d.ts,d.cts,d.mts}",
+            "dist/**/*.tsbuildinfo",
+            "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+            "out-tsc/**/*.tsbuildinfo",
+            "*.tsbuildinfo"
+          ],
+          "from": ["^typecheck"]
+        }
+      ]
+    },
+    "@org/api#typecheck": {
+      "dependsOn": ["build", "^typecheck", "^typecheck-inputs"],
+      "outputs": [
+        "dist/**/*.{d.ts,d.cts,d.mts}",
+        "dist/**/*.{d.ts,d.cts,d.mts}.map",
+        "dist/**/*.tsbuildinfo",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}.map",
+        "out-tsc/**/*.tsbuildinfo",
+        "*.tsbuildinfo"
+      ],
+      "inputs": [
+        "package.json",
+        "tsconfig*.json",
+        "src/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}",
+        "vite.config.*",
+        "vitest.config.*",
+        "playwright.config.*",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        {
+          "mode": "dependencyOutputs",
+          "globs": [
+            "dist/**/*.{d.ts,d.cts,d.mts}",
+            "dist/**/*.tsbuildinfo",
+            "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+            "out-tsc/**/*.tsbuildinfo",
+            "*.tsbuildinfo"
+          ],
+          "from": ["^typecheck"]
+        }
+      ]
+    },
+    "typecheck-inputs": {
+      "dependsOn": ["typecheck", "^typecheck-inputs"],
+      "inputs": [
+        "package.json",
+        {
+          "mode": "dependencyOutputs",
+          "globs": [
+            "dist/**/*.{d.ts,d.cts,d.mts}",
+            "dist/**/*.tsbuildinfo",
+            "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+            "out-tsc/**/*.tsbuildinfo",
+            "*.tsbuildinfo"
+          ],
+          "from": ["typecheck"]
+        }
+      ],
+      "outputs": []
+    }
+  }
+}
