@@ -11,7 +11,9 @@ package unless prefixed with `$TURBO_ROOT$`.
 | Test      | Package files, root TypeScript configs, shared test pacing helpers                                                       | Dependency production sources, test/storybook configs, and generated JavaScript from builds |
 | E2E       | Package files and root TypeScript configs                                                                                | Shop/API builds and dependency production sources                                           |
 
-`CI_RUNNER` affects all task hashes. `CI` and unit-test pacing variables affect
+`CI_RUNNER` affects all task hashes. The checked-in `cache-version.json` file is
+a global input: increment its `version` to invalidate all task caches locally
+and in CI. `CI` and unit-test pacing variables affect
 unit tests. `CI`, browser-test pacing variables, and `BASE_URL` affect browser
 tests. Server tasks receive `HOST` and `PORT` and are not cached.
 
