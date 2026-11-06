@@ -3,13 +3,13 @@
 All task configuration lives in `turbo.json`. File globs are relative to the
 package unless prefixed with `$TURBO_ROOT$`.
 
-| Task      | File inputs                                                                                                              | Dependency inputs                                                                           |
-| --------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| Build     | Package files excluding specs, test setup, test tsconfig, Vitest config, and lint config; root TypeScript base config    | Dependency builds and production source files                                               |
-| Typecheck | Package manifest, TypeScript configs, source and test files, Vite/Vitest/Playwright configs; root TypeScript base config | Declaration files and TypeScript build metadata from direct and transitive typechecks       |
-| Lint      | Package files, root ESLint config, shared lint rules                                                                     | Dependency package files                                                                    |
-| Test      | Package files, root TypeScript configs, shared test pacing helpers                                                       | Dependency production sources, test/storybook configs, and generated JavaScript from builds |
-| E2E       | Package files and root TypeScript configs                                                                                | Shop/API builds and dependency production sources                                           |
+| Task      | File inputs                                                                                                           | Dependency inputs                                         |
+| --------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Build     | Package files excluding specs, test setup, test tsconfig, Vitest config, and lint config; root TypeScript base config | Dependency builds and production source files             |
+| Typecheck | Package files and root TypeScript base config                                                                         | All package files from direct and transitive dependencies |
+| Lint      | Package files, root ESLint config, shared lint rules                                                                  | Dependency package files                                  |
+| Test      | Package files, root TypeScript configs, shared test pacing helpers                                                    | Dependency production sources and test/storybook configs  |
+| E2E       | Package files and root TypeScript configs                                                                             | Shop/API builds and dependency production sources         |
 
 The checked-in `cache-version.json` file is
 a global input: increment its `version` to invalidate all task caches locally
@@ -24,19 +24,19 @@ Typecheck outputs include declarations and declaration maps in `dist` and
 cache hits. JavaScript files produced by application or library builds remain
 owned by the build task.
 
-Structured `dependencyOutputs` inputs hash declarations and `.tsbuildinfo`
-files after the producer tasks complete. Declaration maps are cached but do
-not contribute to consumers' output-based type inputs.
+Typecheck hashes include each package's files and all files in its transitive
+workspace dependency closure through the recursive `dependency-inputs` task.
+Gitignored files, including generated outputs, are excluded. Unrelated packages
+are not included. Typechecks still wait for prerequisite typechecks (and required
+builds), so their cached declarations are available before execution.
 
-The `typecheck-inputs` task has no package script. It fingerprints its own
-package's completed typecheck outputs and recursively includes dependencies'
-`typecheck-inputs` hashes. Consumers depend on these fingerprints as well as
-direct typechecks, so a transitive declaration or build-metadata change reaches
-every consumer, even when an intermediate package's declarations stay the same.
+No task hashes generated dependency outputs. All hashes can be computed before
+prerequisite tasks run. Tests use dependency production sources and configuration
+inputs instead of generated JavaScript.
 
-The `production-inputs`, `dependency-inputs`, and `test-config-inputs` tasks are
-also graph-only tasks. They propagate selected source/configuration hashes
-through packages that have no build script, without executing extra commands.
+The `production-inputs`, `dependency-inputs`, and `test-config-inputs` tasks have
+no package scripts. They propagate selected source/configuration hashes through
+packages without executing extra commands.
 
 ## Limits
 
@@ -47,9 +47,9 @@ whole files rather than selecting individual JSON properties. The shared
 TypeScript inputs are a superset of the language-specific inputs inferred for
 each individual reference project.
 
-Incremental build metadata contains source fingerprints, so some implementation
-or spec edits can invalidate consumers even if public declarations stay the same.
-Adding output-based inputs does not guarantee declaration-only invalidation.
+Changes to any tracked file in an upstream package can invalidate a consumer's
+typecheck, even when its public declarations would remain unchanged. This is a
+conservative source-based workaround for output-dependent caching in CI.
 
 ## Cache storage
 

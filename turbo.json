@@ -19,7 +19,7 @@
       "tags": ["ci"]
     },
     "typecheck": {
-      "dependsOn": ["^typecheck", "^typecheck-inputs"],
+      "dependsOn": ["^typecheck", "^dependency-inputs"],
       "outputs": [
         "dist/**/*.{d.ts,d.cts,d.mts}",
         "dist/**/*.{d.ts,d.cts,d.mts}.map",
@@ -29,26 +29,7 @@
         "out-tsc/**/*.tsbuildinfo",
         "*.tsbuildinfo"
       ],
-      "inputs": [
-        "package.json",
-        "tsconfig*.json",
-        "src/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}",
-        "vite.config.*",
-        "vitest.config.*",
-        "playwright.config.*",
-        "$TURBO_ROOT$/tsconfig.base.json",
-        {
-          "mode": "dependencyOutputs",
-          "globs": [
-            "dist/**/*.{d.ts,d.cts,d.mts}",
-            "dist/**/*.tsbuildinfo",
-            "out-tsc/**/*.{d.ts,d.cts,d.mts}",
-            "out-tsc/**/*.tsbuildinfo",
-            "*.tsbuildinfo"
-          ],
-          "from": ["^typecheck"]
-        }
-      ],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"],
       "tags": ["ci"]
     },
     "lint": {
@@ -68,12 +49,7 @@
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
         "$TURBO_ROOT$/tsconfig.json",
-        "$TURBO_ROOT$/tools/test-delay/**",
-        {
-          "mode": "dependencyOutputs",
-          "globs": ["dist/**/*.js"],
-          "from": ["^build"]
-        }
+        "$TURBO_ROOT$/tools/test-delay/**"
       ],
       "env": ["CI", "UNIT_TEST_*"],
       "tags": ["ci"]
@@ -197,7 +173,7 @@
       "tags": ["ci"]
     },
     "@org/api-products#typecheck": {
-      "dependsOn": ["build", "^typecheck", "^typecheck-inputs"],
+      "dependsOn": ["build", "^typecheck", "^dependency-inputs"],
       "outputs": [
         "dist/**/*.{d.ts,d.cts,d.mts}",
         "dist/**/*.{d.ts,d.cts,d.mts}.map",
@@ -207,30 +183,11 @@
         "out-tsc/**/*.tsbuildinfo",
         "*.tsbuildinfo"
       ],
-      "inputs": [
-        "package.json",
-        "tsconfig*.json",
-        "src/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}",
-        "vite.config.*",
-        "vitest.config.*",
-        "playwright.config.*",
-        "$TURBO_ROOT$/tsconfig.base.json",
-        {
-          "mode": "dependencyOutputs",
-          "globs": [
-            "dist/**/*.{d.ts,d.cts,d.mts}",
-            "dist/**/*.tsbuildinfo",
-            "out-tsc/**/*.{d.ts,d.cts,d.mts}",
-            "out-tsc/**/*.tsbuildinfo",
-            "*.tsbuildinfo"
-          ],
-          "from": ["^typecheck"]
-        }
-      ],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"],
       "tags": ["ci"]
     },
     "@org/api#typecheck": {
-      "dependsOn": ["build", "^typecheck", "^typecheck-inputs"],
+      "dependsOn": ["build", "^typecheck", "^dependency-inputs"],
       "outputs": [
         "dist/**/*.{d.ts,d.cts,d.mts}",
         "dist/**/*.{d.ts,d.cts,d.mts}.map",
@@ -240,45 +197,8 @@
         "out-tsc/**/*.tsbuildinfo",
         "*.tsbuildinfo"
       ],
-      "inputs": [
-        "package.json",
-        "tsconfig*.json",
-        "src/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}",
-        "vite.config.*",
-        "vitest.config.*",
-        "playwright.config.*",
-        "$TURBO_ROOT$/tsconfig.base.json",
-        {
-          "mode": "dependencyOutputs",
-          "globs": [
-            "dist/**/*.{d.ts,d.cts,d.mts}",
-            "dist/**/*.tsbuildinfo",
-            "out-tsc/**/*.{d.ts,d.cts,d.mts}",
-            "out-tsc/**/*.tsbuildinfo",
-            "*.tsbuildinfo"
-          ],
-          "from": ["^typecheck"]
-        }
-      ],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"],
       "tags": ["ci"]
-    },
-    "typecheck-inputs": {
-      "dependsOn": ["typecheck", "^typecheck-inputs"],
-      "inputs": [
-        "package.json",
-        {
-          "mode": "dependencyOutputs",
-          "globs": [
-            "dist/**/*.{d.ts,d.cts,d.mts}",
-            "dist/**/*.tsbuildinfo",
-            "out-tsc/**/*.{d.ts,d.cts,d.mts}",
-            "out-tsc/**/*.tsbuildinfo",
-            "*.tsbuildinfo"
-          ],
-          "from": ["typecheck"]
-        }
-      ],
-      "outputs": []
     },
     "//#format:check": {
       "tags": ["ci"],
