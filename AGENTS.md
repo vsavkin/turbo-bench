@@ -8,6 +8,6 @@
 - Use `npm run dev` to start the shop and API together.
 - Keep package scripts explicit and task dependencies and cache outputs in `turbo.json`.
 - Preserve benchmark pacing defaults in `tools/test-delay` and the browser test pacing helper.
-- CI uses concurrency 4 for build, typecheck, lint, and unit tests, and concurrency 1 for browser tests.
+- Vercel CI schedules tasks tagged `ci` using the task dependency graph. Browser tests use one worker when run locally.
 - Use `npm run format:check` to check formatting.
 - Check `--help` or official documentation before using unfamiliar CLI flags.

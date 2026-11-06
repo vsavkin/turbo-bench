@@ -1,6 +1,5 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
-  "globalEnv": ["CI_RUNNER"],
   "tasks": {
     "build": {
       "dependsOn": ["^build", "^production-inputs"],

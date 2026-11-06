@@ -9,7 +9,7 @@
  * clock speed rather than allocator, memory bandwidth and GC.
  */
 
-/** Units taking ~1s on one GitHub Actions vCPU. Measure with calibrate.mjs. */
+/** Units taking ~1s on one reference vCPU. Measure with calibrate.mjs. */
 export const UNITS_PER_SECOND = 150_000_000;
 
 /** Returns the accumulator so the work cannot be optimized away. */

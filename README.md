@@ -1,6 +1,6 @@
 # Turborepo benchmark
 
-An npm workspace with 510 packages for benchmarking on GitHub Actions.
+An npm workspace with 510 packages for benchmarking on Vercel CI.
 
 Use Node.js 24 and `npm ci`. Run `npm run build`, `npm run typecheck`,
 `npm run lint`, `npm test`, or `npm run e2e`. Run one package with
@@ -14,7 +14,7 @@ still affect elapsed times. CI uses concurrency 4, or 1 for e2e.
 
 For quick correctness checks, set `UNIT_TEST_CPU_SECONDS=0 UNIT_TEST_SLEEP_MS=0`
 and `E2E_TEST_DURATION_MS=0 E2E_TEST_CPU_SECONDS=0`. Defaults remain unchanged.
-Pacing variables participate in their test task hashes; CI_RUNNER affects every task. Use `--force`
+Pacing variables participate in their test task hashes. Use `--force`
 for uncached timing measurements. Caches are local unless Turborepo remote cache
 credentials are configured; CI does not require a remote-cache account.
 

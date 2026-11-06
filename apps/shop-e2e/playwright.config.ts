@@ -54,7 +54,6 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     // Uncomment to test wider variety of browsers
-    // Note, you will also need to update `.github/workflows/ci.yml`
     // Replacing `npx playwright install --only-shell` with `npx playwright install --with-deps`
     // {
     //   name: 'firefox',
