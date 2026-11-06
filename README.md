@@ -22,3 +22,9 @@ Install Chromium with `npm exec playwright install -- chromium` before e2e.
 `npm run validate` preserves the two-minute simulated validation workload.
 
 See [cache inputs and dependency output hashing](docs/caching.md) for the complete configuration.
+
+Vercel CI runs the entire browser suite as one `@org/shop-e2e#e2e` task on
+Ubuntu. It installs Chromium and its system dependencies inside that task,
+then Playwright starts and stops the local API and shop servers. The 100 tests
+remain sequential with their existing pacing (roughly 45 minutes for a full
+uncached run).

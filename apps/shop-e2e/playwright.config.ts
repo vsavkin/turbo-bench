@@ -36,7 +36,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'npm exec turbo run serve -- --filter=@org/api',
+      command: 'node apps/api/dist/main.js',
       url: 'http://localhost:3333/api/products',
       reuseExistingServer: !process.env.CI,
       cwd: workspaceRoot,

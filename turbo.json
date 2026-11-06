@@ -84,19 +84,20 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/tsconfig.json"
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
       ],
-      "env": ["CI", "E2E_*", "BASE_URL"]
-    },
-    "e2e-ci": {
-      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
-      "outputs": ["test-output/**"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/tsconfig.json"
-      ],
-      "env": ["CI", "E2E_*", "BASE_URL"]
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
     },
     "dev": {
       "cache": false,
