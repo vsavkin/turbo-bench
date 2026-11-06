@@ -16,7 +16,8 @@
         "!test-setup.{js,ts}",
         "!vitest.config.*",
         "$TURBO_ROOT$/tsconfig.base.json"
-      ]
+      ],
+      "tags": ["ci"]
     },
     "typecheck": {
       "dependsOn": ["^typecheck", "^typecheck-inputs"],
@@ -48,7 +49,8 @@
           ],
           "from": ["^typecheck"]
         }
-      ]
+      ],
+      "tags": ["ci"]
     },
     "lint": {
       "outputs": [],
@@ -57,7 +59,8 @@
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/eslint.config.mjs",
         "$TURBO_ROOT$/tools/eslint-rules/**"
-      ]
+      ],
+      "tags": ["ci"]
     },
     "test": {
       "dependsOn": ["^build", "^production-inputs", "^test-config-inputs"],
@@ -73,7 +76,8 @@
           "from": ["^build"]
         }
       ],
-      "env": ["CI", "UNIT_TEST_*"]
+      "env": ["CI", "UNIT_TEST_*"],
+      "tags": ["ci"]
     },
     "e2e": {
       "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
@@ -147,7 +151,8 @@
       "env": ["HOST", "PORT"]
     },
     "//#validate": {
-      "cache": false
+      "cache": false,
+      "tags": ["ci"]
     },
     "production-inputs": {
       "dependsOn": ["^production-inputs"],
@@ -189,7 +194,8 @@
         "$TURBO_ROOT$/tsconfig.base.json",
         "$TURBO_ROOT$/tools/build-api.mjs"
       ],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "tags": ["ci"]
     },
     "@org/api-products#typecheck": {
       "dependsOn": ["build", "^typecheck", "^typecheck-inputs"],
@@ -221,7 +227,8 @@
           ],
           "from": ["^typecheck"]
         }
-      ]
+      ],
+      "tags": ["ci"]
     },
     "@org/api#typecheck": {
       "dependsOn": ["build", "^typecheck", "^typecheck-inputs"],
@@ -253,7 +260,8 @@
           ],
           "from": ["^typecheck"]
         }
-      ]
+      ],
+      "tags": ["ci"]
     },
     "typecheck-inputs": {
       "dependsOn": ["typecheck", "^typecheck-inputs"],
@@ -272,6 +280,11 @@
         }
       ],
       "outputs": []
+    },
+    "//#format:check": {
+      "tags": ["ci"],
+      "outputs": []
     }
-  }
+  },
+  "globalDependencies": ["cache-version.json"]
 }
