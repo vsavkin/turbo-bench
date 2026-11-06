@@ -88,7 +88,6 @@
         "$TURBO_ROOT$/tools/run-e2e.mjs"
       ],
       "env": ["CI", "E2E_*", "BASE_URL"],
-      "tags": ["ci", "ci:os:ubuntu"],
       "passThroughEnv": [
         "NODE_EXTRA_CA_CERTS",
         "NODE_USE_SYSTEM_CA",
@@ -284,6 +283,111 @@
     "//#format:check": {
       "tags": ["ci"],
       "outputs": []
+    },
+    "e2e-1": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-1/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "e2e-2": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-2/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "e2e-3": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-3/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "e2e-4": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-4/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "e2e-5": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-5/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
     }
   },
   "globalDependencies": ["cache-version.json"]

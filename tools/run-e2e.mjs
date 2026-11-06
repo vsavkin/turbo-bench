@@ -18,6 +18,6 @@ if (process.env.CI && process.platform === 'linux') {
   run(['install', '--with-deps', 'chromium']);
 }
 
-// One invocation, one worker: keep every spec in the same finite CI task.
+// Each invocation uses one worker; CI shard arguments select its test subset.
 // Playwright's webServer configuration owns server startup and teardown.
 run(['test', ...process.argv.slice(2)]);

@@ -23,8 +23,11 @@ Install Chromium with `npm exec playwright install -- chromium` before e2e.
 
 See [cache inputs and dependency output hashing](docs/caching.md) for the complete configuration.
 
-Vercel CI runs the entire browser suite as one `@org/shop-e2e#e2e` task on
-Ubuntu. It installs Chromium and its system dependencies inside that task,
-then Playwright starts and stops the local API and shop servers. The 100 tests
-remain sequential with their existing pacing (roughly 45 minutes for a full
-uncached run).
+Vercel CI runs the browser suite as five targets, `e2e-1` through `e2e-5`,
+using Playwright sharding. Each runs 20 tests sequentially on its own Ubuntu
+worker, installs Chromium and its system dependencies, and starts/stops its own
+API and shop servers. Existing per-test pacing is unchanged; each shard needs
+roughly 9 minutes plus setup, below the observed 15-minute task deadline.
+
+`npm run e2e` still runs the complete suite locally. Run one shard with
+`npm exec turbo run e2e-1 -- --filter=@org/shop-e2e`.

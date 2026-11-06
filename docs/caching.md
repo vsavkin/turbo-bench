@@ -56,6 +56,7 @@ Adding output-based inputs does not guarantee declaration-only invalidation.
 Local artifacts are stored in `.turbo/cache`. Vercel CI manages remote caching
 automatically for the tasks tagged `ci` in `turbo.json`.
 
-Browser tests run in one `@org/shop-e2e#e2e` task on Ubuntu. The task installs its
-own Chromium dependencies, starts the local servers, and runs all specs with a
-single worker. Its default pacing is unchanged.
+Browser tests run as five CI tasks, `e2e-1` through `e2e-5`, on separate Ubuntu
+workers. Each runs a disjoint Playwright shard with one worker and writes to its
+own `test-output/playwright/shard-N` cache output. The full `e2e` target remains
+available locally and is not tagged for CI. Per-test pacing is unchanged.
