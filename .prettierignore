@@ -1,0 +1,13 @@
+node_modules
+**/dist
+**/out-tsc
+**/test-output
+**/*.tsbuildinfo
+.turbo
+.agents
+.claude
+.codex
+.cursor
+.gemini
+.opencode
+.github/skills

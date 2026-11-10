@@ -1,0 +1,314 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "^production-inputs"],
+      "outputs": ["dist/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!.eslintrc.json",
+        "!eslint.config.*",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}.snap",
+        "!tsconfig.spec.json",
+        "!src/test-setup.{js,ts}",
+        "!test-setup.{js,ts}",
+        "!vitest.config.*",
+        "$TURBO_ROOT$/tsconfig.base.json"
+      ],
+      "tags": ["ci"]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck", "^dependency-inputs"],
+      "outputs": [
+        "dist/**/*.{d.ts,d.cts,d.mts}",
+        "dist/**/*.{d.ts,d.cts,d.mts}.map",
+        "dist/**/*.tsbuildinfo",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}.map",
+        "out-tsc/**/*.tsbuildinfo",
+        "*.tsbuildinfo"
+      ],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"],
+      "tags": ["ci"]
+    },
+    "lint": {
+      "outputs": [],
+      "dependsOn": ["^dependency-inputs"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.mjs",
+        "$TURBO_ROOT$/tools/eslint-rules/**"
+      ],
+      "tags": ["ci"]
+    },
+    "test": {
+      "dependsOn": ["^build", "^production-inputs", "^test-config-inputs"],
+      "outputs": ["test-output/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/test-delay/**"
+      ],
+      "env": ["CI", "UNIT_TEST_*"],
+      "tags": ["ci"]
+    },
+    "e2e": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "serve": {
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "preview": {
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "serve-static": {
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/api#serve": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/api#dev": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/shop#dev": {
+      "with": ["@org/api#dev"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/shop#serve": {
+      "with": ["@org/api#serve"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "@org/shop#preview": {
+      "dependsOn": ["build"],
+      "with": ["@org/api#serve"],
+      "cache": false,
+      "persistent": true,
+      "env": ["HOST", "PORT"]
+    },
+    "//#validate": {
+      "cache": false,
+      "tags": ["ci"]
+    },
+    "production-inputs": {
+      "dependsOn": ["^production-inputs"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!.eslintrc.json",
+        "!eslint.config.*",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}.snap",
+        "!tsconfig.spec.json",
+        "!src/test-setup.{js,ts}",
+        "!test-setup.{js,ts}",
+        "!vitest.config.*"
+      ],
+      "outputs": []
+    },
+    "dependency-inputs": {
+      "dependsOn": ["^dependency-inputs"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
+    "test-config-inputs": {
+      "dependsOn": ["^test-config-inputs"],
+      "inputs": ["tsconfig.spec.json", "tsconfig.storybook.json"],
+      "outputs": []
+    },
+    "@org/api#build": {
+      "dependsOn": ["^build", "^production-inputs"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!.eslintrc.json",
+        "!eslint.config.*",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}",
+        "!**/*.{spec,test}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}.snap",
+        "!tsconfig.spec.json",
+        "!src/test-setup.{js,ts}",
+        "!test-setup.{js,ts}",
+        "!vitest.config.*",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tools/build-api.mjs"
+      ],
+      "outputs": ["dist/**"],
+      "tags": ["ci"]
+    },
+    "@org/api-products#typecheck": {
+      "dependsOn": ["build", "^typecheck", "^dependency-inputs"],
+      "outputs": [
+        "dist/**/*.{d.ts,d.cts,d.mts}",
+        "dist/**/*.{d.ts,d.cts,d.mts}.map",
+        "dist/**/*.tsbuildinfo",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}.map",
+        "out-tsc/**/*.tsbuildinfo",
+        "*.tsbuildinfo"
+      ],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"],
+      "tags": ["ci"]
+    },
+    "@org/api#typecheck": {
+      "dependsOn": ["build", "^typecheck", "^dependency-inputs"],
+      "outputs": [
+        "dist/**/*.{d.ts,d.cts,d.mts}",
+        "dist/**/*.{d.ts,d.cts,d.mts}.map",
+        "dist/**/*.tsbuildinfo",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}",
+        "out-tsc/**/*.{d.ts,d.cts,d.mts}.map",
+        "out-tsc/**/*.tsbuildinfo",
+        "*.tsbuildinfo"
+      ],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"],
+      "tags": ["ci"]
+    },
+    "//#format:check": {
+      "tags": ["ci"],
+      "outputs": []
+    },
+    "e2e-1": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-1/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "e2e-2": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-2/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "e2e-3": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-3/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "e2e-4": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-4/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    },
+    "e2e-5": {
+      "dependsOn": ["@org/shop#build", "@org/api#build", "^production-inputs"],
+      "outputs": ["test-output/playwright/shard-5/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsconfig.json",
+        "$TURBO_ROOT$/tools/run-e2e.mjs"
+      ],
+      "env": ["CI", "E2E_*", "BASE_URL"],
+      "tags": ["ci", "ci:os:ubuntu"],
+      "passThroughEnv": [
+        "NODE_EXTRA_CA_CERTS",
+        "NODE_USE_SYSTEM_CA",
+        "SSL_CERT_FILE",
+        "NPM_CONFIG_CAFILE",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "NO_PROXY"
+      ]
+    }
+  },
+  "globalDependencies": ["cache-version.json"]
+}

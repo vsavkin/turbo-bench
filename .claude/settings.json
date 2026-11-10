@@ -1,0 +1,11 @@
+{
+  "extraKnownMarketplaces": {},
+  "enabledPlugins": {},
+  "sandbox": {
+    "network": {
+      "allowedDomains": [
+        "www.google-analytics.com"
+      ]
+    }
+  }
+}

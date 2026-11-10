@@ -1,0 +1,18 @@
+{
+  "name": "@org/shop-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "@org/shop": "*"
+  },
+  "scripts": {
+    "typecheck": "tsc --build tsconfig.json --emitDeclarationOnly",
+    "lint": "eslint .",
+    "e2e": "node ../../tools/run-e2e.mjs",
+    "e2e-1": "node ../../tools/run-e2e.mjs --shard=1/5 --output=test-output/playwright/shard-1",
+    "e2e-2": "node ../../tools/run-e2e.mjs --shard=2/5 --output=test-output/playwright/shard-2",
+    "e2e-3": "node ../../tools/run-e2e.mjs --shard=3/5 --output=test-output/playwright/shard-3",
+    "e2e-4": "node ../../tools/run-e2e.mjs --shard=4/5 --output=test-output/playwright/shard-4",
+    "e2e-5": "node ../../tools/run-e2e.mjs --shard=5/5 --output=test-output/playwright/shard-5"
+  }
+}
